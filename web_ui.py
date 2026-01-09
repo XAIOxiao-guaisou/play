@@ -30,7 +30,7 @@ decision_engine = DecisionEngine()
 # 启用文件日志，便于排查（logs/app.log）
 configure_logging()
 
-STATIC_DIR = project_path("webui")
+STATIC_DIR = project_path("web", "assets")
 app.mount("/webui", StaticFiles(directory=STATIC_DIR), name="webui")
 
 

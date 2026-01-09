@@ -69,8 +69,7 @@ class AdblockRules:
             return
 
         self._rules = _AdblockRules(lines)
-        logger.info(
-    """Adblock service for request filtering."""
+        logger.info("Adblock service for request filtering.")
 
     @staticmethod
     def from_env() -> AdblockRules:

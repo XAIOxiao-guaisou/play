@@ -28,7 +28,7 @@ class TLSProfile:
     """TLS service for fingerprint profile management."""
 
     @staticmethod
-    def get_profile(name: str) -> TLSProfile:
+    def get_profile(name: str) -> 'TLSProfile':
         """Get a TLS profile by name.
 
         Args:
@@ -36,8 +36,12 @@ class TLSProfile:
 
         Returns:
             TLSProfile instance with the given name.
-        """atible arguments.
+        """
+        return TLSProfile(name=name)
 
+    @staticmethod
+    def playwright_args() -> dict:
+        """
         Returns:
             Dictionary of Playwright launch arguments (currently empty,
             as Playwright doesn't support direct TLS fingerprinting).
