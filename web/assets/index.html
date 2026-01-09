@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="data:," />
+  <title>XHS Cyber UI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg0: #07020d;
+      --bg1: #0b0620;
+      --panel: rgba(14, 10, 28, 0.72);
+      --panel-2: rgba(10, 6, 22, 0.55);
+      --text: #eaf6ff;
+      --muted: rgba(234, 246, 255, 0.72);
+      --line: rgba(234, 246, 255, 0.10);
+      --neon-cyan: #00f5ff;
+      --neon-pink: #ff2bd6;
+      --neon-lime: #7dff5a;
+      --danger: #ff4d6d;
+      --warn: #ffd166;
+      --shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255, 43, 214, 0.14), transparent 28%),
+        radial-gradient(circle at 90% 15%, rgba(0, 245, 255, 0.10), transparent 35%),
+        radial-gradient(circle at 45% 90%, rgba(125, 255, 90, 0.08), transparent 40%),
+        linear-gradient(135deg, var(--bg0), var(--bg1));
+      overflow-x: hidden;
+    }
+
+    /* scanlines + grid */
+    .fx::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        repeating-linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.00),
+          rgba(0, 0, 0, 0.00) 3px,
+          rgba(0, 0, 0, 0.08) 4px
+        );
+      background-size: 56px 56px, 56px 56px, auto;
+      mix-blend-mode: screen;
+      opacity: 0.65;
+      z-index: 1;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 2;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 42px 18px 70px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 18px 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255, 43, 214, 0.09), rgba(0, 245, 255, 0.06));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      display: grid;
+      gap: 8px;
+    }
+
+    .logo {
+      font-family: 'Orbitron', system-ui, sans-serif;
+      font-size: 20px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      line-height: 1.1;
+      position: relative;
+      display: inline-block;
+    }
+
+    .logo::before,
+    .logo::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0.65;
+      pointer-events: none;
+    }
+    .logo::before { transform: translate(1px, 0); color: var(--neon-cyan); }
+    .logo::after { transform: translate(-1px, 0); color: var(--neon-pink); }
+
+    .sub {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .badges {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .badge {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(10, 6, 22, 0.55);
+      color: var(--muted);
+      font-size: 12px;
+      backdrop-filter: blur(10px);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 16px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::after {
+      content: "";
+      position: absolute;
+      inset: -40px;
+      background: radial-gradient(circle at 20% 20%, rgba(0, 245, 255, 0.08), transparent 30%),
+                  radial-gradient(circle at 80% 60%, rgba(255, 43, 214, 0.08), transparent 28%);
+      pointer-events: none;
+    }
+
+    .panel > * { position: relative; z-index: 1; }
+
+    .title {
+      margin: 0 0 12px;
+      font-family: 'Orbitron', system-ui, sans-serif;
+      font-size: 14px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: rgba(234, 246, 255, 0.92);
+    }
+
+    .field { display: grid; gap: 8px; margin-bottom: 14px; }
+
+    .label {
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.3px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 245, 255, 0.22);
+      background: rgba(7, 2, 13, 0.55);
+      color: var(--text);
+      outline: none;
+      transition: box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: rgba(255, 43, 214, 0.48);
+      box-shadow: 0 0 0 3px rgba(255, 43, 214, 0.12);
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 12px;
+      background: rgba(10, 6, 22, 0.55);
+      color: var(--muted);
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.08s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .chip:hover { transform: translateY(-1px); }
+
+    .chip.active {
+      border-color: rgba(0, 245, 255, 0.55);
+      color: rgba(0, 245, 255, 0.95);
+      box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.10);
+    }
+
+    .toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: rgba(10, 6, 22, 0.55);
+    }
+
+    .cta {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid rgba(0, 245, 255, 0.35);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-family: 'Orbitron', system-ui, sans-serif;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(234, 246, 255, 0.92);
+      background:
+        linear-gradient(135deg, rgba(0, 245, 255, 0.18), rgba(255, 43, 214, 0.14));
+      cursor: pointer;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.40);
+      transition: transform 0.08s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      min-width: 168px;
+    }
+
+    .btn:active { transform: translateY(1px); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .log {
+      display: grid;
+      gap: 10px;
+    }
+
+    .line {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      border: 1px solid rgba(234, 246, 255, 0.08);
+      border-radius: 12px;
+      background: rgba(10, 6, 22, 0.55);
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--neon-cyan);
+      box-shadow: 0 0 12px rgba(0, 245, 255, 0.8);
+      margin-top: 2px;
+      flex: 0 0 auto;
+    }
+
+    .dot.warn { background: var(--warn); box-shadow: 0 0 12px rgba(255, 209, 102, 0.8); }
+    .dot.err { background: var(--danger); box-shadow: 0 0 12px rgba(255, 77, 109, 0.85); }
+
+    .out {
+      border: 1px dashed rgba(0, 245, 255, 0.25);
+      border-radius: 14px;
+      background: rgba(7, 2, 13, 0.40);
+      padding: 12px;
+      min-height: 210px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: rgba(234, 246, 255, 0.9);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .foot {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 920px) {
+      .grid { grid-template-columns: 1fr; }
+      .badges { justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body class="fx">
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <div class="logo" data-text="XHS CYBER UI">XHS CYBER UI</div>
+        <div class="sub">赛博朋克交互台 · FastAPI 远程编排 · 输出落盘 JSON</div>
+      </div>
+      <div class="badges">
+        <div class="badge" id="badgeEngine">ENGINE: —</div>
+        <div class="badge" id="badgeBrowser">BROWSER: —</div>
+        <div class="badge" id="badgeNetwork">NET: —</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <h2 class="title">CONTROL</h2>
+
+        <div class="field">
+          <div class="label">关键词（逗号分隔）</div>
+          <input id="keywords" type="text" placeholder="例：瑜伽垫, 健身器材, 家用跑步机" />
+        </div>
+
+        <div class="row">
+          <div class="toggle">
+            <input type="checkbox" id="debug" />
+            <label for="debug" style="margin:0; cursor:pointer;">调试模式（保留样式/图片）</label>
+          </div>
+          <div class="toggle">
+            <input type="checkbox" id="headless" />
+            <label for="headless" style="margin:0; cursor:pointer;">无头模式</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="label">执行引擎（路由决策）</div>
+          <div class="row" id="engineGroup" style="margin-bottom:0;">
+            <div class="chip active" data-page-type="complex_spa">E · Playwright（复杂 SPA）</div>
+            <div class="chip" data-page-type="basic_dynamic">D · 混合（Pyppeteer + Selenium-Wire）</div>
+          </div>
+        </div>
+
+        <div class="cta">
+          <button class="btn" id="submit">RUN</button>
+          <div class="hint" id="hint">建议首次使用有头模式完成登录。</div>
+        </div>
+
+        <div class="log" id="status" style="margin-top:14px;">
+          <div class="line"><span class="dot"></span><span>BOOT: 初始化控制台…</span></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="title">OUTPUT</h2>
+        <div class="out" id="result">等待任务…</div>
+      </div>
+    </div>
+
+    <div class="foot">提示：若弹出登录窗无法点击，可设置环境变量 MANUAL_LOGIN_ONLY=1 后重试。</div>
+  </div>
+
+  <script>
+    const el = (q) => document.querySelector(q);
+    const submitBtn = el('#submit');
+    const keywordsInput = el('#keywords');
+    const debugInput = el('#debug');
+    const headlessInput = el('#headless');
+    const statusBox = el('#status');
+    const resultBox = el('#result');
+    const hint = el('#hint');
+    const badgeEngine = el('#badgeEngine');
+    const badgeBrowser = el('#badgeBrowser');
+    const badgeNetwork = el('#badgeNetwork');
+    const engineChips = Array.from(document.querySelectorAll('#engineGroup .chip'));
+
+    let pageTypeChoice = 'complex_spa';
+
+    function pushStatus(message, type = 'info') {
+      const line = document.createElement('div');
+      line.className = 'line';
+
+      const dot = document.createElement('span');
+      dot.className = 'dot';
+      if (type === 'warn') dot.classList.add('warn');
+      if (type === 'error') dot.classList.add('err');
+
+      const text = document.createElement('span');
+      text.textContent = message;
+
+      line.appendChild(dot);
+      line.appendChild(text);
+      statusBox.prepend(line);
+    }
+
+    function setResult(obj) {
+      if (typeof obj === 'string') {
+        resultBox.textContent = obj;
+        return;
+      }
+      resultBox.textContent = JSON.stringify(obj, null, 2);
+    }
+
+    async function refreshHealth() {
+      try {
+        const res = await fetch('/api/health');
+        const data = await res.json();
+        badgeBrowser.textContent = `BROWSER: ${data.browser || '—'} | headless=${String(data.headless)}`;
+        const net = data.network || {};
+        const netText = net.country ? `${net.country}${net.is_china === true ? ' (CN)' : ''}` : 'Unknown';
+        badgeNetwork.textContent = `NET: ${netText}`;
+        pushStatus('HEALTH: 节点在线', 'info');
+      } catch (e) {
+        pushStatus('HEALTH: 获取失败（后端未启动？）', 'warn');
+      }
+    }
+
+    async function runCrawl() {
+      const keywords = keywordsInput.value.trim();
+      if (!keywords) {
+        pushStatus('输入为空：请填写关键词', 'warn');
+        hint.textContent = '请输入关键词后再运行';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'RUNNING…';
+      hint.textContent = headlessInput.checked ? '无头模式：需已登录或 session 有效' : '有头模式：浏览器会打开，可手动登录';
+
+      pushStatus(`TASK: keywords=${keywords}`, 'info');
+      pushStatus(`MODE: headless=${String(headlessInput.checked)} debug=${String(debugInput.checked)}`, 'info');
+      pushStatus(`ROUTER: page_type=${pageTypeChoice}`, 'info');
+
+      try {
+        const payload = {
+          keywords,
+          debug: Boolean(debugInput.checked),
+          headless: Boolean(headlessInput.checked),
+          platform: 'xiaohongshu',
+          page_type: pageTypeChoice,
+          threat_level: 'medium',
+          success_rate: 0.9,
+          resource_cost: 'medium',
+        };
+
+        const res = await fetch('/api/route_crawl', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) {
+          const msg = await res.text();
+          throw new Error(msg || 'route_crawl failed');
+        }
+
+        const data = await res.json();
+        badgeEngine.textContent = `ENGINE: ${data.engine || '—'}`;
+
+        setResult({
+          engine: data.engine,
+          reasons: data.reasons,
+          output_path: data.output_path,
+          count: data.count,
+          keywords: data.keywords,
+        });
+
+        pushStatus('DONE: 输出已生成', 'info');
+      } catch (err) {
+        setResult({ error: String(err && err.message ? err.message : err) });
+        pushStatus('ERROR: 任务失败（查看 logs/app.log）', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'RUN';
+      }
+    }
+
+    submitBtn.addEventListener('click', runCrawl);
+    keywordsInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        runCrawl();
+      }
+    });
+
+    engineChips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        engineChips.forEach((c) => c.classList.remove('active'));
+        chip.classList.add('active');
+        pageTypeChoice = chip.dataset.pageType || 'complex_spa';
+        pushStatus(`ENGINE: page_type -> ${pageTypeChoice}`, 'info');
+      });
+    });
+
+    refreshHealth();
+  </script>
+</body>
+</html>

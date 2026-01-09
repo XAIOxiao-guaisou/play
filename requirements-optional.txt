@@ -1,0 +1,19 @@
+# 可选依赖文件 - 仅在需要特定功能时安装
+# 使用: pip install -r requirements-optional.txt
+
+# OCR 识别（可选，包体积 >1GB 含 PyTorch）
+easyocr>=1.7.0,<1.8
+
+# Hybrid 混合引擎（可选备选方案，当前项目优先使用 Playwright）
+selenium>=4.16,<5.0
+selenium-wire>=5.1,<6.0
+pyppeteer>=2.0,<3.0
+
+# 广告过滤（可选）
+adblockparser>=0.7,<0.8
+
+# Win10 通知（可选）
+win10toast>=0.0.54
+
+# 可视化爬虫工具（可选）
+# portia  # 需要 Scrapy 支持

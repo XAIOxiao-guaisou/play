@@ -1,0 +1,36 @@
+xiaohongshu:
+  note_card:
+    - ".note-item"
+    - "[data-note-id]"
+    - ".search-note"
+  note_title:
+    - ".note-title"
+    - ".title"
+    - "a.title"
+  note_author:
+    - ".author-name"
+    - ".user-name"
+    - "[data-author]"
+  note_likes:
+    - ".like-wrapper .count"
+    - ".likes"
+    - "[data-likes]"
+  detail_date:
+    - ".bottom-container .date"
+    - ".publish-date"
+    - ".date"
+  detail_collects:
+    - ".interact-container .collect-wrapper .count"
+    - ".collect-wrapper .count"
+  detail_comments:
+    - ".interact-container .chat-wrapper .count"
+    - ".comment-wrapper .count"
+  detail_shares:
+    - ".interact-container .share-wrapper .count"
+    - ".share-wrapper .count"
+  detail_tags:
+    - "#detail-desc .tag"
+    - ".tag"
+  detail_desc:
+    - "#detail-desc"
+    - ".desc"

@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# 数据文件
+*.db
+*.sqlite
+*.csv
+*.json
+*.xlsx
+output/
+data/
+
+# 日志
+logs/
+*.log
+
+# 环境变量
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Playwright
+.playwright/
+playwright-report/
+
+# 操作系统
+.DS_Store
+Thumbs.db
