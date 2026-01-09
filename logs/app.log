@@ -1,0 +1,3 @@
+2026-01-09 03:48:25,596 [WARNING] src.core.protocol_breakthrough - 2026-01-09 03:48:25.591 | WARNING  | src.core.protocol_breakthrough:detect_environment:270 - ⚠️ 网络环境检测失败: <urlopen error [WinError 10053] 你的主机中的软件中止了一个已建立的连接。>
+2026-01-09 03:48:49,252 [INFO] src.core.protocol_breakthrough - 2026-01-09 03:48:49.251 | INFO     | src.core.protocol_breakthrough:detect_environment:263 - 🌐 网络环境: US Texas | ISP: COGENT-174 | 延迟: 2015ms
+2026-01-09 03:48:49,253 [WARNING] src.core.protocol_breakthrough - 2026-01-09 03:48:49.252 | WARNING  | src.core.protocol_breakthrough:detect_environment:267 - ⚠️ 检测到代理网络，可能影响爬取
