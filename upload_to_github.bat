@@ -109,7 +109,7 @@ echo.
 
 :: 推送到远程仓库
 echo 🚀 推送到 GitHub...
-echo 📤 正在上传代码到 https://github.com/XAIOxiao-guaisou/play.git
+echo 📤 正在上传代码到 https://github.com/XAIOxiao-guaisou/play
 git push -u origin main
 if %errorlevel% equ 0 (
     echo ✅ 推送成功
